@@ -7,6 +7,7 @@ import { promisify } from 'util';
 import execSh from 'exec-sh';
 import Listr from 'listr';
 import { projectInstall } from 'pkg-install';
+import console from 'console';
 
 
 const access = promisify(fs.access);
@@ -35,13 +36,13 @@ export async function createProject(options) {
     };
 
     const currentFileUrl = import.meta.url;
+    console.log(currentFileUrl);
     const templateDir = path.resolve(
         new URL(currentFileUrl).pathname,
         '../../commons/templates',
         options.template.toLowerCase()
     );
     options.templateDirectory = templateDir;
-    console.log(options)
     try {
         await access(templateDir, fs.constants.R_OK);
     } catch (err) {
