@@ -4,13 +4,14 @@
   "description": "project to generate new proyects",
   "main": "src/index.js",
   "bin": {
-    "@rapid-workflows/rapid-gen": "bin/rapid-gen",
+    "@rapid-workflows/rapid-gen": "src/rapid-gen",
     "rapid-gen": "bin/rapid-gen"
   },
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
+    "yeoman-generator",
     "cli",
     "rapid-gen"
   ],
@@ -24,9 +25,14 @@
     "chalk": "^4.1.1",
     "esm": "^3.2.25",
     "exec-sh": "^0.4.0",
+    "fs-extra": "^10.0.1",
     "inquirer": "^8.2.0",
     "listr": "^0.14.2",
+    "lodash": "^4.17.21",
+    "mem-fs-editor": "^9.4.0",
     "ncp": "^2.0.0",
-    "pkg-install": "^1.0.0"
+    "pkg-install": "^1.0.0",
+    "yeoman-environment": "^3.9.1",
+    "yeoman-generator": "^5.6.1"
   }
 }

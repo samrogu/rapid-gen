@@ -9,6 +9,12 @@ import Listr from 'listr';
 import { projectInstall } from 'pkg-install';
 import console from 'console';
 
+var memFs = require('mem-fs');
+var editor = require('mem-fs-editor');
+
+var store = memFs.create();
+var fsEditor = editor.create(store);
+
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -36,7 +42,6 @@ export async function createProject(options) {
     };
 
     const currentFileUrl = import.meta.url;
-    console.log(currentFileUrl);
     const templateDir = path.resolve(
         new URL(currentFileUrl).pathname,
         '../../commons/templates',
@@ -50,7 +55,22 @@ export async function createProject(options) {
         process.exit(1);
     }
 
-    const tasks = new Listr([
+    if(options.template == "spring-boot") {
+      const mavenConfigDir = '/maven/';
+      console.log(options.templateDirectory + mavenConfigDir +'pom.xml')
+      console.log(options.targetDirectory + '/pom.xml')
+
+      options.SPRING_BOOT_VERSION = '2.6.4';
+      fsEditor.write(options.targetDirectory + '/pom.xml', "")
+      
+      fsEditor.copyTpl(
+            options.templateDirectory + mavenConfigDir +'pom.xml',
+            options.targetDirectory + '/pom.xml',
+            options
+        );
+        fsEditor.commit()
+    } else {
+      const tasks = new Listr([
         {
           title: 'Copy project files',
           task: () => copyTemplateFiles(options),
@@ -74,6 +94,7 @@ export async function createProject(options) {
       ]);
      
       await tasks.run();
+    }
     console.log('%s Project ready', chalk.green.bold('DONE'));
     return true;
 }
